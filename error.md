@@ -98,6 +98,16 @@ fastjson
 
 ```java
 java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
+```
 
+原因:
+
+```properties
+使用fastjson报的错误
+原因是序列化了
+
+ServletRequest
+ServletResponse
+MultipartFile
 ```
 
