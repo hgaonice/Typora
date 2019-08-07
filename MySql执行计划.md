@@ -12,7 +12,7 @@ EXPLAIN SELECT * FROM tableName
 
 ### 2.查询计划的参数解读 
 
-![](C:\Users\Admin\Desktop\Typora\img\1.png)
+![](img\1.png)
 
 |     名称      | 描述                                                         |
 | :-----------: | :----------------------------------------------------------- |
