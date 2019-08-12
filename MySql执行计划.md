@@ -34,3 +34,4 @@ EXPLAIN SELECT * FROM tableName
 - **EXPLAIN不能显示MySQL在执行查询时所作的优化工作；**
 - **EXPALIN只能解释SELECT操作，其他操作要重写为SELECT后查看执行计划。（mysql5.6的版本已经支持直接查看）**
 - **部分统计信息是估算的，并非精确值；**
+
