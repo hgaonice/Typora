@@ -31,6 +31,7 @@ file /usr/share/mysql/russian/errmsg.sys from install of MySQL-server-5.5.8-1.li
 
 ```shell
 yum -y remove mariadb-libs-1:5.5.60-1.el7_5*
+yum -y remove mariadb-libs-1:5.5.52-1.el7*
 ```
 
 **重新安装**
@@ -106,7 +107,7 @@ ntsysv   #查看是否自启
 #### **设置密码**
 
 ```shell
-/usr/bin/mysqladmin -u root password 123456
+/usr/bin/mysqladmin -u root password gaohangwangh922104
 ```
 
 #### **查看数据库存放目录**
@@ -180,12 +181,16 @@ collation_server=utf8_general_ci
 
 ```shell
 service mysql restart
+
 ```
 
 **配置远程连接**
 
 ```sql
-grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option;
+grant all privileges on *.* to 'root'@'%' identified by 'gaohwangh922104' with grant option;
+flush privileges;
+#修改密码
+update user set password=password('gaohwangh922104') where user='root' and host='localhost';
 flush privileges;
 ```
 
