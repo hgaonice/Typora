@@ -192,6 +192,123 @@ flush privileges;
 #修改密码
 update user set password=password('gaohwangh922104') where user='root' and host='localhost';
 flush privileges;
+
+grant all privileges on *.* to 'root'@'%' identified by 'gaohangwanghong' with grant option;
+flush privileges;
+
+
+/sbin/iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+/etc/rc.d/init.d/iptables save
+/etc/init.d/iptables restart
+/sbin/iptables -L -n
+
+/sbin/iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+
+firewall-cmd --query-port=3306/tcp
 ```
 
 **完成!**
+
+
+
+
+
+
+
+## 方法/步骤
+
+ 
+
+1.  
+
+   执行firewall-cmd --permanent --zone=public --add-port=3306/tcp，提示FirewallD is not running，如下图所示。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=3783b5472134349b74066e85f9eb1521/7dd98d1001e939013391d96372ec54e737d196df.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=1)
+
+2.  
+
+   通过systemctl status firewalld查看firewalld状态，发现当前是dead状态，即防火墙未开启。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=0c6057bedc39b6004dce0fb7d9513526/55e736d12f2eb93882fe2eafdc628535e4dd6fdf.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=2)
+
+3.  
+
+   通过systemctl start firewalld开启防火墙，没有任何提示即开启成功。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=32b9322ef2f2b211e42e854efa816511/e61190ef76c6a7efec9afc7bf4faaf51f3de662a.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=3)
+
+4.  
+
+   再次通过systemctl status firewalld查看firewalld状态，显示running即已开启了。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=79a4d13cf11986184147ef847aec2e69/503d269759ee3d6d9f44d3964a166d224e4adee9.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=4)
+
+5. 5
+
+   如果要关闭防火墙设置，可能通过systemctl stop firewalld这条指令来关闭该功能。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=ce97d76d33f33a879e6d001af65d1018/2e2eb9389b504fc2cecce458ecdde71191ef6ddf.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=5)
+
+6. 6
+
+   再次执行执行firewall-cmd --permanent --zone=public --add-port=3306/tcp，提示success，表示设置成功，这样就可以继续后面的设置了。
+
+   [![centos出现“FirewallD is not running”怎么办](https://imgsa.baidu.com/exp/w=500/sign=9a524f1e82d4b31cf03c94bbb7d7276f/42166d224f4a20a4969c689a99529822730ed0e9.jpg)](http://jingyan.baidu.com/album/5552ef47f509bd518ffbc933.html?picindex=6)
+
+   END
+
+**firewall-cmd --reload**   # 配置立即生效
+
+
+
+2、查看防火墙所有开放的端口
+
+**firewall-cmd --zone=public --list-ports**
+
+ 
+
+3.、关闭防火墙
+
+如果要开放的端口太多，嫌麻烦，可以关闭防火墙，安全性自行评估
+
+**systemctl stop firewalld.service**
+
+ 
+
+4、查看防火墙状态
+
+ **firewall-cmd --state**
+
+ 
+
+5、查看监听的端口
+
+**netstat -lnpt**
+
+![img](https://img2018.cnblogs.com/blog/1336432/201903/1336432-20190302110949754-1765820036.png)
+
+*PS:centos7默认没有 netstat 命令，需要安装 net-tools 工具，yum install -y net-tools*
+
+ 
+
+ 
+
+6、检查端口被哪个进程占用
+
+**netstat -lnpt |grep 5672**
+
+![img](https://img2018.cnblogs.com/blog/1336432/201903/1336432-20190302104128381-1210567174.png)
+
+ 
+
+7、查看进程的详细信息
+
+**ps 6832**
+
+![img](https://img2018.cnblogs.com/blog/1336432/201903/1336432-20190302104342651-779103690.png)
+
+ 
+
+8、中止进程
+
+**kill -9 6832**
